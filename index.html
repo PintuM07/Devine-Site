@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Darshan — The Divine Lila of Shri Krishna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     DIVINE SOUND PLAYER
+============================================================ -->
+<div id="sound-player">
+  <!-- Expandable Panel -->
+  <div class="sound-panel" id="sound-panel">
+    <div class="sound-panel-title muted" id="panel-title">Divine Soundscape</div>
+
+    <!-- Waveform bars -->
+    <div class="sound-visualizer" id="sound-visualizer">
+      <!-- bars injected by JS -->
+    </div>
+
+    <div class="sound-now-playing" id="now-playing-label">Select a soundscape below</div>
+
+    <!-- Track selector -->
+    <div class="sound-tracks" id="sound-tracks">
+      <button class="sound-track-btn" data-track="tanpura" onclick="selectTrack('tanpura', this)">🪕 Tanpura Drone — Sa</button>
+      <button class="sound-track-btn" data-track="flute" onclick="selectTrack('flute', this)">🎵 Krishna Venu (Flute)</button>
+      <button class="sound-track-btn" data-track="om" onclick="selectTrack('om', this)">ॐ Om Chanting</button>
+      <button class="sound-track-btn" data-track="bells" onclick="selectTrack('bells', this)">🔔 Temple Bells &amp; Shankha</button>
+    </div>
+
+    <!-- Volume -->
+    <div class="sound-controls-row">
+      <span class="vol-icon">🔈</span>
+      <input type="range" class="vol-slider" id="vol-slider" min="0" max="100" value="45"
+             oninput="setVolume(this.value)">
+      <span class="vol-icon">🔊</span>
+    </div>
+  </div>
+
+  <!-- Main toggle -->
+  <button class="sound-toggle-btn" id="sound-toggle-btn" onclick="togglePanel()" title="Divine Soundscape">
+    <span class="btn-icon" id="btn-icon">🎵</span>
+  </button>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loading">
+  <div class="loading-om">ॐ</div>
+  <div class="loading-text">Entering the Divine Lila</div>
+  <div class="loading-bar"><div class="loading-fill"></div></div>
+</div>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- STAR CANVAS -->
+<canvas id="cosmos-canvas"></canvas>
+
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">
+    <span class="nav-om">ॐ</span> Digital Darshan
+  </a>
+  <ul class="nav-links">
+    <li><a href="#birth">Birth</a></li>
+    <li><a href="#bal-lila">Bal Lila</a></li>
+    <li><a href="#mathura">Mathura</a></li>
+    <li><a href="#dwaraka">Dwaraka</a></li>
+    <li><a href="#gita">Gita</a></li>
+    <li><a href="#wisdom">Wisdom</a></li>
+  </ul>
+</nav>
+
+<!-- ============================================================
+     HERO SECTION
+============================================================ -->
+<section id="hero">
+  <div class="lotus-bg" id="lotus-bg"></div>
+  <div class="hero-glow"></div>
+  <svg class="hero-mandala" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="200" cy="200" r="190" stroke="#f9d949" stroke-width="0.5"/>
+    <circle cx="200" cy="200" r="150" stroke="#f9d949" stroke-width="0.5"/>
+    <circle cx="200" cy="200" r="100" stroke="#f9d949" stroke-width="0.5"/>
+    <circle cx="200" cy="200" r="50" stroke="#f9d949" stroke-width="0.5"/>
+    <g stroke="#f9d949" stroke-width="0.4" opacity="0.8">
+      <line x1="200" y1="10" x2="200" y2="390"/>
+      <line x1="10" y1="200" x2="390" y2="200"/>
+      <line x1="61" y1="61" x2="339" y2="339"/>
+      <line x1="339" y1="61" x2="61" y2="339"/>
+      <line x1="10" y1="130" x2="390" y2="270"/>
+      <line x1="130" y1="10" x2="270" y2="390"/>
+      <line x1="390" y1="130" x2="10" y2="270"/>
+      <line x1="270" y1="10" x2="130" y2="390"/>
+    </g>
+    <!-- Lotus petals around the circle -->
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(0 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(45 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(90 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(135 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(180 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(225 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(270 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(315 200 200)"/>
+  </svg>
+
+  <div class="hero-content">
+    <span class="hero-om">ॐ</span>
+    <h1 class="hero-title display-title">Shri Krishna</h1>
+    <p class="hero-subtitle">The Complete Divine Lila</p>
+    <p class="hero-verse">
+      "Whenever righteousness wanes and unrighteousness rises,<br>
+      I manifest Myself. For the protection of the good,<br>
+      for the destruction of the wicked, and for the establishment of dharma,<br>
+      I am born in every age."<br>
+      <em>— Bhagavad Gita, 4.7–4.8</em>
+    </p>
+    <a href="#birth" class="hero-scroll-cta">
+      Begin the Journey
+      <div class="scroll-line"></div>
+    </a>
+  </div>
+</section>
+
+<!-- ============================================================
+     TIMELINE NAVIGATION
+============================================================ -->
+<div id="timeline-nav">
+  <div class="timeline-strip">
+    <a href="#birth" class="timeline-node" data-section="birth">
+      <div class="timeline-dot"></div>
+      <span class="timeline-label">Divine Birth</span>
+    </a>
+    <a href="#bal-lila" class="timeline-node" data-section="bal-lila">
+      <div class="timeline-dot"></div>
+      <span class="timeline-label">Bal Lila</span>
+    </a>
+    <a href="#mathura" class="timeline-node" data-section="mathura">
+      <div class="timeline-dot"></div>
+      <span class="timeline-label">Mathura</span>
+    </a>
+    <a href="#education" class="timeline-node" data-section="education">
+      <div class="timeline-dot"></div>
+      <span class="timeline-label">Education</span>
+    </a>
+    <a href="#dwaraka" class="timeline-node" data-section="dwaraka">
+      <div class="timeline-dot"></div>
+      <span class="timeline-label">Dwaraka</span>
+    </a>
+    <a href="#gita" class="timeline-node" data-section="gita">
+      <div class="timeline-dot"></div>
+      <span class="timeline-label">Bhagavad Gita</span>
+    </a>
+    <a href="#departure" class="timeline-node" data-section="departure">
+      <div class="timeline-dot"></div>
+      <span class="timeline-label">Departure</span>
+    </a>
+  </div>
+</div>
+
+<!-- ============================================================
+     LILA I — DIVINE BIRTH
+============================================================ -->
+<section class="lila-section" id="birth">
+  <div class="lila-bg"></div>
+  <div class="section-overlay-pattern"></div>
+  <span class="lila-section-number">I</span>
+  <div class="lila-inner">
+    <div class="lila-visual reveal-left">
+      <div class="lila-image-frame">
+        <div class="ai-art art-birth">
+          <span class="art-icon" style="color:#f9d949;">🌸</span>
+          <div style="text-align:center;">
+            <div style="color:rgba(249,217,73,0.8);font-family:'Cinzel Decorative',serif;font-size:0.9rem;margin-bottom:0.5rem;">Divine Descent</div>
+            <div style="color:rgba(255,249,242,0.4);font-family:'EB Garamond',serif;font-style:italic;font-size:0.8rem;">Devaki's Womb, Midnight of Ashtami</div>
+          </div>
+        </div>
+        <div class="prompt-overlay">
+          <h4>🎨 AI Image Generation Prompt</h4>
+          <p>Hyper-realistic Indian classical painting style. Midnight storm at Mathura prison — divine blue-skinned infant Krishna radiating golden light in the arms of terrified-yet-awe-struck Vasudeva. Devaki kneeling on stone floor, celestial halo around the child. Prison bars cast long shadows. Four-armed divine form briefly visible in glowing aura. Gods Brahma and Indra descend unseen above. Lotus petals materializing from the prison floor. God rays pierce the dungeon ceiling. Colors: deep midnight indigo, flute gold, lotus pink. Ultra-cinematic, devotional realism.</p>
+        </div>
+        <span class="prompt-hint">hover for image prompt</span>
+      </div>
+    </div>
+    <div class="lila-content reveal-right">
+      <span class="lila-tag">Lila I · Bhagavatam & Vishnu Purana</span>
+      <h2 class="lila-title">
+        Divine Birth
+        <span class="lila-title-devanagari">जन्म लीला — Janma Lila</span>
+      </h2>
+      <div class="lila-divider"></div>
+      <div class="story-text">
+        <p>The world had grown heavy under the tyranny of <strong>Kamsa</strong>, the demon-king of Mathura, whose cruelty spread like a shadow across the land. The earth herself, weighed down by the burden of adharma, approached Lord Brahma in the form of a cow, weeping inconsolably. And Brahma, understanding her lament, led the celestials to the shore of the cosmic ocean to entreat <strong>Lord Vishnu</strong> for deliverance. According to the <span class="scripture-ref">Srimad Bhagavatam (Canto 10)</span>, the Lord assured them — He would descend upon the earth Himself.</p>
+        <p>Kamsa, who had imprisoned his own sister <strong>Devaki</strong> and her husband <strong>Vasudeva</strong> upon hearing a celestial prophecy that her eighth child would become his slayer, murdered six of her children at birth. When the seventh son — <strong>Balarama</strong> — was transferred miraculously to the womb of Rohini in Vrindavan, Kamsa believed the pregnancy had simply miscarried.</p>
+        <p>Then came the sacred night of <strong>Shravana Krishnapaksha Ashtami</strong> — the eighth lunar night of the dark fortnight. A great storm descended on Mathura. Thunder shook the heavens. Rivers surged. And in the silence between lightning strikes, a child of divine radiance was born to Devaki in that stone prison — <strong>four-armed, bearing conch, disc, mace, and lotus</strong>, His skin the deep blue of rain-drenched clouds, His eyes like lotus petals, His tiny form radiating the light of ten thousand suns. Vasudeva and Devaki fell prostrate in awe, recognizing the Lord of the Universe who had appeared in their arms.</p>
+        <p>The Lord then transformed His form into that of an ordinary infant, and instructed Vasudeva — through divine will — to carry Him across the <strong>Yamuna river</strong> to Gokul, where Yashoda and Nanda awaited with a newborn daughter. As the <span class="scripture-ref">Vishnu Purana</span> describes, Vasudeva lifted the child, the prison doors swung open of their own accord, the guards fell into deep sleep, and the great Yamuna — swollen from the rains — parted before him, her waters touching the Lord's feet in reverence. The divine child was exchanged, the girl-child returned to Mathura, and when Kamsa reached for this child to destroy her, she slipped from his grasp and ascended to the sky — revealing herself as the goddess <strong>Yoga Maya</strong>, who declared that his destroyer had already been born and was beyond his reach.</p>
+        <p>Thus began the most sacred of all descents. Thus the Eternal entered time, took the form of the finite, so that the finite might remember the Eternal.</p>
+        <div class="philosophy-line">"The Lord who contains the cosmos chose to be held by human arms — for in that sacred smallness lay the greatest mystery of love."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><div class="divider-line"></div><span class="divider-lotus">❋</span></div>
+
+<!-- ============================================================
+     LILA II — BAL LILA (VRINDAVAN)
+============================================================ -->
+<section class="lila-section" id="bal-lila">
+  <div class="lila-bg"></div>
+  <div class="section-overlay-pattern"></div>
+  <span class="lila-section-number">II</span>
+  <div class="lila-inner">
+    <div class="lila-visual reveal-right">
+      <div class="lila-image-frame">
+        <div class="ai-art art-bal">
+          <span class="art-icon" style="color:#2a8faa;">🦚</span>
+          <div style="text-align:center;">
+            <div style="color:rgba(42,143,170,0.9);font-family:'Cinzel Decorative',serif;font-size:0.9rem;margin-bottom:0.5rem;">The Butter Thief</div>
+            <div style="color:rgba(255,249,242,0.4);font-family:'EB Garamond',serif;font-style:italic;font-size:0.8rem;">Vrindavan — The Forest of Bliss</div>
+          </div>
+        </div>
+        <div class="prompt-overlay">
+          <h4>🎨 AI Image Generation Prompt</h4>
+          <p>Hyper-realistic Indian classical painting. Young dark-blue-skinned Krishna, 3-4 years old, crowned with peacock feather, golden ornaments, reaching mischievously into a clay pot of butter suspended from ceiling by rope. Sunlight streams through bamboo lattice windows. Yashoda visible through doorway, hand raised in playful rebuke. Gopika women in colorful sarees watching with concealed smiles. Vrindavan courtyard setting — terracotta walls, marigold garlands, morning sun. Expression of divine innocence and mischief on Krishna's face. God rays. Colors: warm amber, forest green, lotus pink. Miniature painting detail level.</p>
+        </div>
+        <span class="prompt-hint">hover for image prompt</span>
+      </div>
+    </div>
+    <div class="lila-content reveal-left">
+      <span class="lila-tag">Lila II · Srimad Bhagavatam, Canto 10</span>
+      <h2 class="lila-title">
+        The Years of Vrindavan
+        <span class="lila-title-devanagari">वृन्दावन लीला — Vrindavan Lila</span>
+      </h2>
+      <div class="lila-divider"></div>
+      <div class="story-text">
+        <p>Gokul, and later <strong>Vrindavan</strong>, became the theatre of the most tender and playful chapters of the divine drama. As the <span class="scripture-ref">Srimad Bhagavatam (Canto 10, Chapters 6–34)</span> narrates in extraordinary detail, the infant Krishna's first miracles were not thunderous displays of cosmic power — they were intimate, gentle, and drenched in the sweetness of maternal love.</p>
+        <p>The demoness <strong>Putana</strong>, sent by Kamsa in the guise of a beautiful woman, offered her poisoned breast to the infant Krishna. But the Lord, seeing through the disguise, accepted her offering — and as He suckled, He drew out not only the poison but her very life-force. Even in her death, because she had offered her breast to the Lord — however maliciously — she received liberation. Thus even the enemies of Krishna were transformed by His touch.</p>
+        <p>As a toddler, <strong>Trinavarta</strong>, a tornado-demon, carried the child aloft into the sky. But the infant grew so heavy with divine weight that the demon could no longer fly, fell to earth, and was destroyed. When Yashoda once looked into her child's open mouth — scolding Him for eating dirt — she saw within it the entire cosmos: <strong>stars, planets, rivers, mountains</strong>, all of creation revolving in His small throat. Terrified and overwhelmed, she forgot what she had seen, for the Lord veiled her memory with His maya.</p>
+        <p>As He grew, Krishna became the irresistible <strong>Makhan Chor</strong> — the Butter Thief. He would gather His cowherd companions, raid the homes of the Gopika women, steal butter and curd, share it with monkeys, and when caught, flash a smile so disarming that the mothers could only laugh. The Gopikas would complain to Yashoda, but Yashoda could never bring herself to punish the child who had stolen her heart entirely. The <span class="scripture-ref">Bhagavatam</span> says the Lord accepted this butter not out of hunger but out of love — to receive the offering of devotion from those simple, pure-hearted women of Vrindavan.</p>
+        <p>The great <strong>Govardhan Leela</strong> stands as one of the most profound events of this period. When Krishna saw the villagers preparing a grand ritual for Indra, the king of the gods, He challenged this tradition. He told Nanda and the cowherds that they owed their livelihood to the hill Govardhan and the cows — not to Indra — and convinced them to worship the hill instead. An enraged Indra sent devastating storms and floods upon Gokul. And Krishna, with effortless grace, lifted the entire <strong>Govardhan hill</strong> on the little finger of His left hand — holding it like an umbrella over all of Vrindavan for seven continuous days and nights, sheltering every creature beneath it. Indra, humbled, descended to seek forgiveness. This was not merely a miracle — it was a teaching: that nature herself serves the Lord, and that the divine dwells in the simplest and most immediate gifts of the earth.</p>
+        <p>And then there was the <strong>Raas Leela</strong> — the sacred circle dance on the banks of the Yamuna beneath the full moon of Sharad Purnima, described in the <span class="scripture-ref">Bhagavatam's Rasa Panchadhyayi (Chapters 29–33 of Canto 10)</span> as the highest expression of pure devotional love. When the Gopikas, hearing Krishna's flute on that autumn night, abandoned everything and came running to the forest, Krishna first tested their devotion by asking them to return home. Only those whose love was unconditional remained. In that sacred space, beyond all social convention, He danced with them — multiplying Himself so that each Gopika experienced Him beside her alone, each believing she was His singular beloved. <strong>Radha</strong>, the embodiment of the soul's total surrender, stood at the center of this divine dance — Her love for Krishna described in later traditions as the highest bhakti, the longing of the soul for its source. The flute of Krishna — reaching across all barriers — was the call of the Divine to the individual soul: Come. Return. Remember.</p>
+        <div class="philosophy-line">"The stolen butter was never the butter — it was always the heart. And every heart He stole, He freed."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><div class="divider-line"></div><span class="divider-lotus">❋</span></div>
+
+<!-- ============================================================
+     LILA III — MATHURA (KAMSA VADHA)
+============================================================ -->
+<section class="lila-section" id="mathura">
+  <div class="lila-bg"></div>
+  <div class="section-overlay-pattern"></div>
+  <span class="lila-section-number">III</span>
+  <div class="lila-inner">
+    <div class="lila-visual reveal-left">
+      <div class="lila-image-frame">
+        <div class="ai-art art-mathura">
+          <span class="art-icon" style="color:#f45050;">⚡</span>
+          <div style="text-align:center;">
+            <div style="color:rgba(244,80,80,0.9);font-family:'Cinzel Decorative',serif;font-size:0.9rem;margin-bottom:0.5rem;">The Slaying of Kamsa</div>
+            <div style="color:rgba(255,249,242,0.4);font-family:'EB Garamond',serif;font-style:italic;font-size:0.8rem;">Mathura Wrestling Arena</div>
+          </div>
+        </div>
+        <div class="prompt-overlay">
+          <h4>🎨 AI Image Generation Prompt</h4>
+          <p>Hyper-realistic classical Indian painting. Grand wrestling arena in Mathura — young adolescent Krishna, dark blue skin gleaming with divine light, mid-leap above the terrified Kamsa on a royal throne. Crowds of onlookers in turmoil. Balarama visible to the side, powerful and composed. Kamsa's crown falling. Arena decorated with championship banners. Dramatic shaft of divine light from above illuminating Krishna. Dust rising from the arena floor. Colors: crimson, gold, deep indigo, smoke. Cinematic action composition. Classical Pahari miniature painting style with hyper-realism detail.</p>
+        </div>
+        <span class="prompt-hint">hover for image prompt</span>
+      </div>
+    </div>
+    <div class="lila-content reveal-right">
+      <span class="lila-tag">Lila III · Srimad Bhagavatam, Canto 10 Ch. 43–44</span>
+      <h2 class="lila-title">
+        Return to Mathura
+        <span class="lila-title-devanagari">मथुरा लीला — Mathura Lila</span>
+      </h2>
+      <div class="lila-divider"></div>
+      <div class="story-text">
+        <p>When the time came, Kamsa — never able to shake the prophecy from his mind — sent his messenger <strong>Akrura</strong> to Vrindavan, inviting Krishna and Balarama to Mathura under the pretext of a great wrestling festival. The departure of Krishna from Vrindavan is one of the most heart-breaking passages in the <span class="scripture-ref">Bhagavatam</span>. The Gopikas wept through the night. The rivers grew still. The peacocks stopped dancing. And yet Krishna, without turning back, set His face toward the destiny that had been ordained before His birth.</p>
+        <p>As the chariot bearing Krishna and Balarama crossed the <strong>Yamuna</strong>, Akrura was granted a divine vision — beneath the holy river's waters, he beheld the Lord in His four-armed cosmic form, surrounded by celestials and serpents. He emerged from the river shaking, transformed, understanding that this simple cowherd boy was nothing less than the Supreme Being.</p>
+        <p>Entering Mathura, Krishna demonstrated His nature at every step. He requested a garland from a hunchbacked woman named <strong>Kubja</strong> — and with a touch of His hand, straightened her spine, restoring her beauty. He broke the massive bow of Kamsa — the symbol of the tyrant's power — with a single snap that shook the earth. The city itself seemed to breathe easier with His presence.</p>
+        <p>At Kamsa's wrestling arena, <strong>Chanura and Mustika</strong> — Kamsa's giant wrestlers — were set to fight the two young boys from Vrindavan. The crowd watched in horror and disbelief. Yet Krishna and Balarama, moving with divine skill and effortless strength, defeated these mighty warriors and slew them. Then, as the <span class="scripture-ref">Bhagavatam</span> describes, <strong>Krishna leapt from the wrestling arena directly onto the royal platform where Kamsa sat</strong>. The tyrant who had murdered six infants, who had imprisoned the divine parents, who had terrorized the earth — fell beneath the hands of the Lord he had feared his entire life. His death, though deserved, was also a liberation — for whoever fixes their mind on Krishna with any intensity of feeling attains His nature.</p>
+        <p>Krishna then freed <strong>Vasudeva and Devaki</strong> from their long imprisonment and fell at their feet. The reunion of the divine child with his birth parents — written with extraordinary tenderness in the Bhagavatam — is a scene of overwhelming emotion. The parents who had never been able to hold their child freely now held him, weeping, while the cosmos stood still in reverence.</p>
+        <div class="philosophy-line">"Even the tyrant's gaze fixed upon the Lord became a form of meditation — and in the moment of defeat, Kamsa too was freed."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><div class="divider-line"></div><span class="divider-lotus">❋</span></div>
+
+<!-- ============================================================
+     LILA IV — EDUCATION UNDER SANDIPANI
+============================================================ -->
+<section class="lila-section" id="education">
+  <div class="lila-bg"></div>
+  <div class="section-overlay-pattern"></div>
+  <span class="lila-section-number">IV</span>
+  <div class="lila-inner">
+    <div class="lila-visual reveal-right">
+      <div class="lila-image-frame">
+        <div class="ai-art art-edu">
+          <span class="art-icon" style="color:#2a8faa;">📿</span>
+          <div style="text-align:center;">
+            <div style="color:rgba(42,143,170,0.9);font-family:'Cinzel Decorative',serif;font-size:0.9rem;margin-bottom:0.5rem;">The Student Lord</div>
+            <div style="color:rgba(255,249,242,0.4);font-family:'EB Garamond',serif;font-style:italic;font-size:0.8rem;">Ujjaini — Gurukul of Sandipani</div>
+          </div>
+        </div>
+        <div class="prompt-overlay">
+          <h4>🎨 AI Image Generation Prompt</h4>
+          <p>Serene classical Indian painting. Young Krishna and Balarama as students in the forest hermitage of sage Sandipani — Krishna seated humbly before the ancient guru, wearing simple saffron cloth, divine peacock feather tucked in hair, studying sacred texts. Sudama (Kuchela) seated nearby as fellow student. Dappled forest light through ancient trees. Sacred fire in background. Simple clay vessels, sacred texts on wooden stand. Expression of genuine humility and reverence on Krishna's face despite divine knowledge. Colors: forest green, saffron, warm amber. Gurukul atmosphere. Rajput miniature painting style.</p>
+        </div>
+        <span class="prompt-hint">hover for image prompt</span>
+      </div>
+    </div>
+    <div class="lila-content reveal-left">
+      <span class="lila-tag">Lila IV · Srimad Bhagavatam, Canto 10 Ch. 45</span>
+      <h2 class="lila-title">
+        The Humble Student
+        <span class="lila-title-devanagari">गुरुकुल लीला — Gurukul Lila</span>
+      </h2>
+      <div class="lila-divider"></div>
+      <div class="story-text">
+        <p>Having fulfilled the purpose of His return to Mathura, and having restored the Yadava kingdom to <strong>Ugrasena</strong>, Krishna and Balarama enrolled as students in the gurukul of the great sage <strong>Sandipani Muni</strong>, whose hermitage was in <strong>Ujjaini (Avantipura)</strong>. This episode, though brief in the scriptural narrative, carries immeasurable spiritual significance. Here was the <strong>Omniscient Lord of the Universe</strong> — who had already revealed the cosmos in His mouth to Yashoda — choosing to sit as a humble student at the feet of a human teacher.</p>
+        <p>As the <span class="scripture-ref">Srimad Bhagavatam (10.45)</span> describes, Krishna served His guru with such completeness of devotion — fetching firewood from the forest, tending to all the needs of the ashram — that Sandipani Muni is described as being overwhelmed with affection for His divine students. In this gurukul, Krishna also formed his lifelong friendship with <strong>Sudama (Kuchela)</strong>, the poor brahmin boy who would later visit Krishna as the Emperor of Dwaraka and receive immeasurable grace in return for a handful of flattened rice.</p>
+        <p>The <span class="scripture-ref">Bhagavatam</span> records that Krishna mastered all sixty-four arts and the four Vedas in just sixty-four days — one art per day — revealing through this accelerated learning that the knowledge He received was not truly new to Him, but rather a recognition, an honor given to the institution of the guru. At the end of His studies, when His guru asked for a <strong>guru dakshina</strong> (honorarium), the sage — knowing he stood before the divine — asked for the impossible: the return of his dead son, who had drowned in the ocean. Krishna and Balarama descended to the realm of <strong>Yama</strong>, the lord of death, retrieved the boy, and restored him to his weeping parents. The debts of love, Krishna understood, are always to be honored — even by the Lord Himself.</p>
+        <p>This chapter teaches that no being is above the necessity of a teacher, no wisdom is too sacred to receive through humility, and that a great teacher's greatest blessing is the student who serves without reservation. The Omniscient bowed before knowledge itself — and in that bow, illumined all learning as sacred.</p>
+        <div class="philosophy-line">"When the Knower of All sits humbly at another's feet, He does not seek wisdom — He teaches the world what wisdom truly is."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><div class="divider-line"></div><span class="divider-lotus">❋</span></div>
+
+<!-- ============================================================
+     LILA V — DWARAKA
+============================================================ -->
+<section class="lila-section" id="dwaraka">
+  <div class="lila-bg"></div>
+  <div class="section-overlay-pattern"></div>
+  <span class="lila-section-number">V</span>
+  <div class="lila-inner">
+    <div class="lila-visual reveal-left">
+      <div class="lila-image-frame">
+        <div class="ai-art art-dwaraka">
+          <span class="art-icon" style="color:#f9d949;">🏛️</span>
+          <div style="text-align:center;">
+            <div style="color:rgba(249,217,73,0.9);font-family:'Cinzel Decorative',serif;font-size:0.9rem;margin-bottom:0.5rem;">The Golden City</div>
+            <div style="color:rgba(255,249,242,0.4);font-family:'EB Garamond',serif;font-style:italic;font-size:0.8rem;">Dwaraka — City of the Yadavas</div>
+          </div>
+        </div>
+        <div class="prompt-overlay">
+          <h4>🎨 AI Image Generation Prompt</h4>
+          <p>Majestic Indian classical painting. The legendary golden city of Dwaraka rising from the Arabian Sea at sunset — impossibly tall crystal and gold spires, gardens with divine flowers, peacocks roaming free, celestial architecture beyond human imagination. In the foreground, Krishna in royal blue robes with golden crown rides a chariot with white horses. Rukmini seated beside Him, radiant and regal. The ocean reflects the city's divine light. Flags and banners of the Yadava clan. Clouds part to reveal heavenly realms above. Colors: oceanic blue, gold, cream, rose. Panoramic aerial view. Pahari miniature meets hyper-cinematic realism.</p>
+        </div>
+        <span class="prompt-hint">hover for image prompt</span>
+      </div>
+    </div>
+    <div class="lila-content reveal-right">
+      <span class="lila-tag">Lila V · Mahabharata & Srimad Bhagavatam</span>
+      <h2 class="lila-title">
+        The Kingdom of Dwaraka
+        <span class="lila-title-devanagari">द्वारका लीला — Dwaraka Lila</span>
+      </h2>
+      <div class="lila-divider"></div>
+      <div class="story-text">
+        <p>When the terrible <strong>Jarasandha</strong>, father-in-law of Kamsa and emperor of Magadha, besieged Mathura seventeen times in vengeful fury, Krishna made a decision that would be misunderstood by many — He withdrew. He led the entire Yadava clan westward to the coast of the ocean, where He caused the divine architect <strong>Vishwakarma</strong> to raise from the sea itself a magnificent new city: <strong>Dwaraka</strong>. The city described in the <span class="scripture-ref">Mahabharata (Sabha Parva)</span> and the <span class="scripture-ref">Bhagavatam (Canto 10)</span> was a marvel beyond all earthly construction — twelve yojanas wide, with crystal palaces, emerald gardens, roads paved with precious stones, and divine trees bearing fruit in all seasons. The Yadavas settled there as a free and prosperous people, under the sovereignty of the Lord.</p>
+        <p>The marriage of <strong>Rukmini</strong> — princess of Vidarbha and the earthly manifestation of Goddess Lakshmi — to Krishna is one of the most beloved narratives of this period. Rukmini, whose heart belonged entirely to Krishna though her brother Rukmi had arranged her marriage to another, secretly sent a letter to Krishna through a brahmin messenger, expressing her devotion and asking Him to carry her away before the wedding ceremony. The <span class="scripture-ref">Bhagavatam (Canto 10, Ch. 52–53)</span> preserves this letter — one of the most beautiful expressions of divine longing in all literature. Krishna, recognizing the purity of her love, arrived in his chariot on the eve of the wedding and carried Rukmini away before the assembled kings could respond. He would later marry several other queens — each a woman who had been imprisoned or cursed, each liberated by her union with the Lord — including the sixteen thousand women freed from the captivity of the demon <strong>Narakasura</strong>.</p>
+        <p>The destruction of <strong>Narakasura</strong> (Bhaumasura) — the demon who had stolen the divine earrings of Aditi, the mother of the gods, and imprisoned sixteen thousand women — was accomplished by Krishna and <strong>Rukmini</strong> together, with Rukmini famously shooting the final arrow. This narrative, celebrated as <strong>Naraka Chaturdashi</strong> (the day before Diwali), established Krishna not merely as a warrior king but as the protector of all those who had no other refuge.</p>
+        <p>In Dwaraka, Krishna also played the pivotal role of statesman and diplomat across all of Aryavarta. His friendship with <strong>Arjuna</strong>, the Pandava prince, was among the deepest relationships of this era — rooted in a spiritual kinship that would find its ultimate expression on the battlefield of Kurukshetra. He served as mediator, counselor, and ultimately the charioteer of dharma itself.</p>
+        <div class="philosophy-line">"Dwaraka was built not to retreat from the world — but to build, within it, a space worthy of the divine life."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><div class="divider-line"></div><span class="divider-lotus">❋</span></div>
+
+<!-- ============================================================
+     LILA VI — BHAGAVAD GITA / KURUKSHETRA
+============================================================ -->
+<section class="lila-section" id="gita">
+  <div class="lila-bg"></div>
+  <div class="section-overlay-pattern"></div>
+  <span class="lila-section-number">VI</span>
+  <div class="lila-inner">
+    <div class="lila-visual reveal-right">
+      <div class="lila-image-frame">
+        <div class="ai-art art-gita">
+          <span class="art-icon" style="color:#f9d949;">🌌</span>
+          <div style="text-align:center;">
+            <div style="color:rgba(249,217,73,0.9);font-family:'Cinzel Decorative',serif;font-size:0.9rem;margin-bottom:0.5rem;">Vishvarupa Darshan</div>
+            <div style="color:rgba(255,249,242,0.4);font-family:'EB Garamond',serif;font-style:italic;font-size:0.8rem;">Kurukshetra — Between Two Armies</div>
+          </div>
+        </div>
+        <div class="prompt-overlay">
+          <h4>🎨 AI Image Generation Prompt</h4>
+          <p>Transcendent epic Indian classical painting. Kurukshetra battlefield — two enormous armies face each other in an amber dawn. In the center, a golden war chariot pulled by four white horses. Krishna in divine blue, four-armed cosmic form begins to emerge — faces in all directions, blazing like a thousand suns, armies and gods visible within His cosmic body. Arjuna kneels in the chariot, overwhelmed, shielding his eyes. Sanjaya watches from afar in trance. All of creation visible in the Vishvarupa — stars, planets, the web of existence. Colors: burning gold, cosmic blue, epic crimson, dawn amber. Maximalist cosmic scale. Hyper-detailed Mughal/Pahari style meets cosmic surrealism.</p>
+        </div>
+        <span class="prompt-hint">hover for image prompt</span>
+      </div>
+    </div>
+    <div class="lila-content reveal-left">
+      <span class="lila-tag">Lila VI · The Bhagavad Gita · Bhishma Parva, Mahabharata</span>
+      <h2 class="lila-title">
+        The Song of God
+        <span class="lila-title-devanagari">भगवद्गीता — Bhagavad Gita</span>
+      </h2>
+      <div class="lila-divider"></div>
+      <div class="story-text">
+        <p>The Great War between the Pandavas and the Kauravas had been building for decades — rooted in betrayal, injustice, and the slow suffocation of dharma. Krishna had himself traveled to Hastinapura as a messenger of peace, offering every possible path to reconciliation, knowing full well that Duryodhana would refuse. When war became inevitable, both Arjuna and Duryodhana came to Krishna seeking his support. Arjuna chose <strong>Krishna alone</strong> — unarmed, pledging only to drive his chariot. Duryodhana took the Narayani army. In this choice lay the deepest wisdom: the presence of the Lord, without weapons, is worth more than all the armies of the world.</p>
+        <p>On the morning of the great battle, as the conches sounded and the armies readied themselves, <strong>Arjuna</strong> — the greatest archer of his age — asked Krishna to drive his chariot between the two armies so he might see who he was about to fight. And when he saw before him his grandfather <strong>Bhishma</strong>, his teacher <strong>Drona</strong>, his cousins, his beloved kinsmen — his <strong>Gandiva bow slipped from his fingers</strong>. He collapsed into the seat of the chariot, overwhelmed, declaring that he could not fight. This was not cowardice — it was the most human of all agonies: the conflict between duty and love, between the world's demand and the heart's grief.</p>
+        <p>And in that moment of collapse, Krishna spoke. What followed — across eighteen chapters, seven hundred verses — became the <strong>Bhagavad Gita</strong>, the Song of the Lord, the most luminous scripture ever spoken on this earth. He began by reminding Arjuna of the indestructibility of the soul: <em>"The soul is never born, nor does it die at any time... It is not slain when the body is slain."</em> He unfolded the path of <strong>Karma Yoga</strong> — action without attachment to results, the discipline of doing one's duty as an offering to the divine. He revealed <strong>Jnana Yoga</strong> — the path of wisdom, discrimination, seeing through the veil of maya to the eternal reality. And He revealed above all the path of <strong>Bhakti Yoga</strong> — pure, unconditional love as the supreme means of union with God.</p>
+        <p>When Arjuna asked to see Krishna's true form, the Lord granted him divine sight — and revealed the <strong>Vishvarupa</strong>, the Cosmic Form: infinite faces, infinite arms, containing within Himself all of time and creation, blazing with the light of ten thousand suns, terrifying and magnificent beyond all comprehension. The armies and their warriors could be seen already consumed within His form — for time itself had already determined the outcome. Arjuna, trembling, begged to see the gentle familiar form once again. And Krishna, in His infinite compassion, returned to the beloved form of Shyamasundara — and spoke the final and most secret of all teachings: <em>"Abandon all varieties of dharma and simply surrender unto Me alone. I shall deliver you from all sins. Do not fear."</em> (Gita 18.66)</p>
+        <p>The Gita was not only for Arjuna. The <span class="scripture-ref">Bhagavad Gita</span> is addressed to every soul that has ever stood at the intersection of duty and despair, love and loss, action and stillness — and found itself unable to move. It is the Lord's eternal answer, spoken once between two armies, but echoing through all of time.</p>
+        <div class="philosophy-line">"Between two armies, beyond the noise of war, the silence in which the Lord speaks — that is where every soul must eventually arrive."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><div class="divider-line"></div><span class="divider-lotus">❋</span></div>
+
+<!-- ============================================================
+     LILA VII — DEPARTURE (MAUSALA PARVA)
+============================================================ -->
+<section class="lila-section" id="departure">
+  <div class="lila-bg"></div>
+  <div class="section-overlay-pattern"></div>
+  <span class="lila-section-number">VII</span>
+  <div class="lila-inner">
+    <div class="lila-visual reveal-left">
+      <div class="lila-image-frame">
+        <div class="ai-art art-departure">
+          <span class="art-icon" style="color:#2a8faa;">🌙</span>
+          <div style="text-align:center;">
+            <div style="color:rgba(42,143,170,0.8);font-family:'Cinzel Decorative',serif;font-size:0.9rem;margin-bottom:0.5rem;">The Great Return</div>
+            <div style="color:rgba(255,249,242,0.4);font-family:'EB Garamond',serif;font-style:italic;font-size:0.8rem;">Prabhasa — Forest of Final Peace</div>
+          </div>
+        </div>
+        <div class="prompt-overlay">
+          <h4>🎨 AI Image Generation Prompt</h4>
+          <p>Profoundly serene Indian classical painting. Krishna alone in an ancient forest at golden dusk — reclining beneath a peepal tree, eyes half-closed in deep meditation, right foot resting on left knee. A hunter visible in the distant shadows, arrow already released. Divine light emanates from Krishna's body, softening and growing as He prepares to depart. Above Him, the sky opens into a luminous gateway — Vaikuntha glimpsed beyond. Celestials descend silently in reverence. Forest bathed in honey-gold light. Absolute stillness. Expression of perfect peace and divine completion on Krishna's face. Colors: deep forest indigo, amber, gold, celestial white. Melancholy beauty. Rajput painting style, deeply devotional.</p>
+        </div>
+        <span class="prompt-hint">hover for image prompt</span>
+      </div>
+    </div>
+    <div class="lila-content reveal-right">
+      <span class="lila-tag">Lila VII · Mahabharata — Mausala Parva</span>
+      <h2 class="lila-title">
+        The Divine Departure
+        <span class="lila-title-devanagari">निर्याण लीला — Niryana Lila</span>
+      </h2>
+      <div class="lila-divider"></div>
+      <div class="story-text">
+        <p>Thirty-six years after the war of Kurukshetra ended, the final chapter of Krishna's earthly Lila unfolded — not with a battle, but with a profound stillness. As narrated in the <span class="scripture-ref">Mahabharata's Mausala Parva</span>, the destruction of the Yadava clan — Krishna's own people — came from within, as a consequence of a curse pronounced by the sage <strong>Durvasa</strong> upon the irreverent young Yadavas. The Yadavas, drunk with pride and prosperity, began fighting among themselves, and in a terrible fratricidal conflict at <strong>Prabhasa Tirtha</strong>, they destroyed one another with reeds that had grown from the very iron pestle they had mocked the sages with.</p>
+        <p>Krishna witnessed this destruction with perfect equanimity — for He knew that all manifestation follows the arc that was written before its beginning. He had done everything that could be done. After sending the widows and survivors under the care of <strong>Arjuna</strong> — who arrived to escort them, only to find his divine powers suddenly diminished without the presence of the Lord — Krishna chose to be alone. He sent His brother Balarama into the forest, where Balarama, whose soul was the divine Shesha Naga, peacefully relinquished his body and departed. Then Krishna, alone, sat beneath the shade of a <strong>peepal tree</strong> in the forest of Prabhasa, in the attitude of deep meditation.</p>
+        <p>A hunter named <strong>Jara</strong> — moved by a mistaken perception — shot an arrow that struck the sole of Krishna's foot, the only place on His body that was vulnerable by virtue of an ancient connection to a previous birth. When Jara came running in horror to see what he had done, he found the Lord looking at him with absolute compassion and peace. Krishna forgave him completely, blessed him, and sent him to the higher realms. This is the extraordinary nature of the Lord — even in the moment of His bodily departure, His first act was forgiveness. His last gift was grace.</p>
+        <p>As the <span class="scripture-ref">Mausala Parva</span> describes, a divine effulgence arose from Krishna's body — the light that had been clothed in that beautiful dark form for over a hundred years — rose into the heavens, and the gods who had been watching the drama of His lila from the celestial spheres stood in silent awe. Dwaraka, that golden city built from the sea, was reclaimed by the sea — as if the ocean itself had only lent the land for as long as the Lord required it. The city submerged gradually, peacefully, in the waves.</p>
+        <p>The Pandavas, upon receiving the news of Krishna's departure, understood that their own time on earth was complete. They renounced their kingdoms, crowned <strong>Parikshit</strong> — the grandson of Arjuna — as king, and embarked on the <strong>Mahaprasthana</strong>, the great final journey into the Himalayas. The age of Krishna had ended. The <strong>Kali Yuga</strong> had begun. But the teaching He had given — in forest and palace, in a mother's kitchen and on a battlefield, in the whisper of a flute and in the cosmic thunder of the Gita — those teachings, the <span class="scripture-ref">Bhagavad Gita</span> and the <span class="scripture-ref">Srimad Bhagavatam</span>, would remain as His presence in the world, available to every soul in every generation that would come after.</p>
+        <div class="philosophy-line">"He did not leave. He simply dissolved — back into the music that had always been playing, the flute that the entire universe has always been breathing through."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><div class="divider-line"></div><span class="divider-lotus">❋</span></div>
+
+<!-- ============================================================
+     DIVINE SYMBOLS SECTION
+============================================================ -->
+<section id="symbols">
+  <div class="symbols-title-area reveal">
+    <h2 class="symbols-title">Sacred Symbols</h2>
+    <p class="symbols-subtitle">Three forms through which the Lord speaks without words</p>
+  </div>
+  <div class="symbols-grid">
+    <div class="symbol-card reveal delay-1">
+      <span class="symbol-icon">🦚</span>
+      <h3>The Peacock Feather</h3>
+      <span class="symbol-meaning">Mor Pankh</span>
+      <p>The feather Krishna wore upon His crown — the peacock, which dances at the coming of rain, became the emblem of divine joy. Just as the peacock surrenders to the storm's music, the devotee surrenders to the will of the Lord. Every Vrindavan tradition describes the peacocks bowing their heads when Krishna played His flute, offering their feathers voluntarily, not as gift but as recognition.</p>
+    </div>
+    <div class="symbol-card reveal delay-2">
+      <span class="symbol-icon">🎵</span>
+      <h3>The Divine Flute</h3>
+      <span class="symbol-meaning">Murali — Venu</span>
+      <p>The Venu, or flute, is described throughout the <span class="scripture-ref">Bhagavatam's Venu Gita (Canto 10.21)</span> as the most fortunate of all objects — for it rested on the lips of the Lord. It is hollow — and in that hollowness, the divine breath moves. The flute symbolizes the soul that has emptied itself of ego, becoming a perfect instrument for the divine song to pass through, calling all creation home.</p>
+    </div>
+    <div class="symbol-card reveal delay-3">
+      <span class="symbol-icon">🪷</span>
+      <h3>The Sacred Lotus</h3>
+      <span class="symbol-meaning">Kamal — Padma</span>
+      <p>Krishna stands upon the lotus, holds the lotus, and is described as lotus-eyed (<em>Kamal-nayana</em>). The lotus, rooted in mud yet unstained by water, blossoming toward the sun — is the perfect symbol of the liberated soul. To live in the world fully, to act without attachment, to remain in contact with the earth yet always oriented toward the divine: this is the teaching of the lotus, and of Krishna Himself.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     WISDOM ENGINE
+============================================================ -->
+<section id="wisdom">
+  <svg class="wisdom-mandala-bg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="200" cy="200" r="190" stroke="#f9d949" stroke-width="0.5"/>
+    <circle cx="200" cy="200" r="140" stroke="#f9d949" stroke-width="0.4"/>
+    <circle cx="200" cy="200" r="90" stroke="#f9d949" stroke-width="0.3"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(0 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(30 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(60 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(90 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(120 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(150 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(180 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(210 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(240 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(270 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(300 200 200)"/>
+    <ellipse cx="200" cy="55" rx="18" ry="30" stroke="#f9d949" stroke-width="0.4" transform="rotate(330 200 200)"/>
+  </svg>
+
+  <div class="wisdom-inner">
+    <span class="wisdom-tag">Navanitam — The Divine Essence</span>
+    <h2 class="wisdom-title reveal">The Bhagavad Gita Speaks</h2>
+    <div class="wisdom-display reveal delay-2">
+      <div id="wisdom-quote">
+        <span id="quote-text"></span><span class="cursor-blink" id="quote-cursor"></span>
+      </div>
+      <div id="wisdom-ref"></div>
+    </div>
+    <button class="wisdom-btn reveal delay-3" onclick="newWisdom()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="23 4 23 10 17 10"></polyline>
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+      </svg>
+      Receive New Wisdom
+    </button>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <span class="footer-om">ॐ</span>
+  <h2 class="footer-title">Hare Krishna</h2>
+  <p class="footer-verse">
+    "Hare Krishna Hare Krishna, Krishna Krishna Hare Hare<br>
+    Hare Rama Hare Rama, Rama Rama Hare Hare"<br>
+    <em>— Kali Santarana Upanishad</em>
+  </p>
+  <div class="footer-refs">
+    <span class="footer-ref">Srimad Bhagavatam</span>
+    <span class="footer-ref">Bhagavad Gita</span>
+    <span class="footer-ref">Mahabharata</span>
+    <span class="footer-ref">Vishnu Purana</span>
+  </div>
+  <p class="footer-copy">
+    A Digital Temple — Built with Reverence &amp; Code<br>
+    All Scriptural Content Referenced from Authenticated Hindu Shastras
+  </p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
